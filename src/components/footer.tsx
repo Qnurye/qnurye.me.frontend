@@ -1,4 +1,3 @@
-
 type FooterProps = {
     className?: string
 }
