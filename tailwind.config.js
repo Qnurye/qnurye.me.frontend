@@ -11,6 +11,9 @@ module.exports = {
         'pastel-blue': '#e7eaf6',
         'deep-blue': '#113F67',
         'lavender': '#A2A8D3'
+      },
+      height: {
+        'dock': "calc(100vh - 50px)",
       }
     },
   },
