@@ -1,13 +1,12 @@
 "use client";
 
-import {useEffect, useState} from "react";
-import Image from "next/image";
+import {MouseEventHandler, useEffect, useState} from "react";
 import Link from "next/link";
 import Head from "next/head";
-import Footer from "@/components/footer";
-import {SignInForm} from "@/app/signin/page";
+import AccountBoxOutlinedIcon from '@mui/icons-material/AccountBoxOutlined';
+import SignInForm from "@/app/signin/signInForm";
 
-function Navigator({ className = '', title = "",url = "", seperated = false }) {
+function IndexPageNavigator({ className = '', title = "",url = "", seperated = false }) {
     return (
         <div className={`${className} inline-flex text-deep-blue transition-all duration-400 ${seperated ? 'text-lg opacity-70' : 'text-5xl'}`}>
             <span className={`transition-all duration-700
@@ -42,7 +41,7 @@ type ArticleProps = {
 function Article({article, className = '', seperated = false}: ArticleProps) {
     return (
         <div className={`font-serif ${className} ${seperated
-        ? 'mt-14 mb-14 ml-32 mr-16'
+        ? 'mt-14 mb-14 md:ml-32 md:mr-16 ml-5 mr-5'
         : 'mt-10 mb-10 ml-5'
         }`}>
             <div className={`text-deep-blue font-bold ${seperated
@@ -63,48 +62,50 @@ function Article({article, className = '', seperated = false}: ArticleProps) {
 
 function Qnurye({ className = '', seperated = false }) {
     return (
-        <text className={`${className} fixed duration-700 font-bold z-40 text-lavender font-serif ${seperated
+        <text className={`${className} fixed duration-700 drop-shadow-2xl bold italic z-40 text-lavender ${seperated
             ? 'top-6 right-5 text-2xl opacity-30'
-            : 'top-12 right-1/2 translate-x-1/2 text-5xl'
-        }`}>Qnurye</text>
+            : 'top-12 right-1/3 md:right-1/2 translate-x-1/2 text-3xl md:text-5xl'
+        }`}>qnurye.me</text>
     );
 }
 
-function QnuryeAvatar({ className = '', seperated = false }) {
+type QnuryeAvatarProps = {
+    className?: string
+    seperated?: boolean
+    onClick?: MouseEventHandler
+}
+function ProfileImage({ className = '', seperated = false, onClick = undefined}: QnuryeAvatarProps) {
     return (
-        <Image
-            src={"/assets/qnurye.png"}
-            alt={"Qnurye's Avatar"}
-            height={100}
-            width={100}
-            className={`${className} col-start-1 cursor-none transition-all duration-700 hover:opacity-100 ${seperated
-                ? 'rounded-3xl p-2 opacity-5 hover:drop-shadow-lg hover:translate-x-2 hover:translate-y-2'
-                : 'hover:drop-shadow-2xl rounded-xl hover:ring-4 hover:ring-lavender hover:translate-x-5 -hover:translate-y-5'}`}
-        />
+        <span className={`${className} text-center text-deep-blue w-fit h-fit cursor-none transition-all duration-700 hover:opacity-100 ${seperated
+                ? 'rounded-3xl opacity-5 hover:shadow hover:translate-x-2 hover:translate-y-2'
+                : 'hover:shadow-2xl rounded-xl hover:ring-4 hover:ring-lavender hover:translate-x-5 -hover:translate-y-5'}`}
+         onClick={onClick}>
+            <AccountBoxOutlinedIcon className={`text-[100px]`} />
+            <br/>
+            <i><b>Sign In</b></i>
+        </span>
     );
 }
 
-function DockBar({ className = '', seperated = false }) {
+function DockBar({ className = '', seperated = false, onClickProfileImage = undefined }: {
+    className?: string
+    seperated?: boolean
+    onClickProfileImage?: MouseEventHandler
+}) {
     return (
-        <div className={`${className} grid bg-pastel-blue sticky left-0 content-between transition-all
+        <div className={`${className} grid left-0 bg-pastel-blue sticky content-between transition-all
         duration-700 ease-in-out ${seperated
-            ? 'w-[100px] h-dock ml-5 top-4 rounded-3xl drop-shadow-md hover:drop-shadow-2xl hover:-translate-y-2'
-            : 'w-screen p-10 h-screen top-0'}
+            ? 'w-[100px] -translate-x-full md:-translate-x-0 h-dock md:ml-5 top-4 rounded-3xl md:drop-shadow-md hover:drop-shadow-2xl hover:-translate-y-2'
+            : 'w-full p-10 h-screen top-0'}
         `}>
-            <QnuryeAvatar seperated={seperated} />
-            <div className={`col-start-1 col-span-1 flex flex-col transition-all duration-700
+            <ProfileImage seperated={seperated} onClick={onClickProfileImage} />
+            <div className={`col-span-1 flex flex-col transition-all duration-700 text-center items-center justify-between
             content-around h-max${seperated ? '-translate-y-20' :''}`}>
-                <Navigator className="flex-1 mt-5" title={"Archives"} seperated={seperated} />
-                <Navigator className="flex-1 mt-5" title={"Labs"} seperated={seperated} />
-                <Navigator className="flex-1 mt-5" title={"About"} seperated={seperated} />
+                <IndexPageNavigator className="flex-1" title={"Archives"} seperated={seperated} />
+                <IndexPageNavigator className="flex-1 mt-5" title={"Labs"} seperated={seperated} />
+                <IndexPageNavigator className="flex-1 mt-5" title={"About"} seperated={seperated} />
             </div>
-            <div className='col-start-1' />
-            <div className={`outline-1 outline-dashed transition-all duration-700 col-start-2 row-start-2 w-0 z-10 rounded-2xl ${seperated
-                ? 'outline-pastel-blue'
-                : 'outline-deep-blue'
-            }`} />
-
-            <div className='col-start-2 col-end-7' />
+            <div className='row-span-2' />
         </div>
     );
 }
@@ -112,6 +113,7 @@ function DockBar({ className = '', seperated = false }) {
 export default function Page() {
     const [sidebarStyle] = useState('w-full p-5');
     const [seperated, setSeperated] = useState(false);
+    const [signinHidden, setSigninHidden] = useState(true);
 
     useEffect( () => {
         function handleScroll() {
@@ -134,13 +136,16 @@ export default function Page() {
             <Head>
                 <meta name="theme-color" content={'#e7eaf6'} />
             </Head>
+            <div className="w-full h-screen absolute top-0 left-0 bg-deep-blue"></div>
             <div className={"min-h-full h-fit grid"}>
                 <Qnurye seperated={seperated} />
-                <DockBar seperated={seperated} />
+                <DockBar seperated={seperated} onClickProfileImage={()=>{
+                    setSigninHidden(false)
+                }} />
 
-                <div className={`absolute transition-all duration-700 z-40 ${seperated
-                    ? 'col-start-2 mt-24'
-                    : 'col-start-2 m-96'
+                <div className={`transition-all duration-700 ${seperated
+                    ? ''
+                    : ''
                 }`}>
                     {[{
                         id: 1,
@@ -171,7 +176,7 @@ export default function Page() {
                     )}
                 </div>
             </div>
-            <SignInForm floating={true} />
+            <SignInForm floating={true} hidden={signinHidden} onClose={()=>{setSigninHidden(true)}} />
             {/*<Footer className={""}></Footer>*/}
         </div>
     )
