@@ -5,6 +5,7 @@ import Link from "next/link";
 import Head from "next/head";
 import AccountBoxOutlinedIcon from '@mui/icons-material/AccountBoxOutlined';
 import SignInForm from "@/app/signin/signInForm";
+import Footer from "@/components/footer";
 
 function IndexPageNavigator({ className = '', title = "",url = "", seperated = false }) {
     return (
@@ -80,7 +81,7 @@ function ProfileImage({ className = '', seperated = false, onClick = undefined}:
                 ? 'rounded-3xl opacity-5 hover:shadow hover:translate-x-2 hover:translate-y-2'
                 : 'hover:shadow-2xl rounded-xl hover:ring-4 hover:ring-lavender hover:translate-x-5 -hover:translate-y-5'}`}
          onClick={onClick}>
-            <AccountBoxOutlinedIcon className={`text-[100px]`} />
+            <AccountBoxOutlinedIcon sx={{ fontSize: 100 }} />
             <br/>
             <i><b>Sign In</b></i>
         </span>
@@ -144,7 +145,7 @@ export default function Page() {
                 }} />
 
                 <div className={`transition-all duration-700 ${seperated
-                    ? ''
+                    ? 'mt-5'
                     : ''
                 }`}>
                     {[{
@@ -177,7 +178,7 @@ export default function Page() {
                 </div>
             </div>
             <SignInForm floating={true} hidden={signinHidden} onClose={()=>{setSigninHidden(true)}} />
-            {/*<Footer className={""}></Footer>*/}
+            <Footer className={""}></Footer>
         </div>
     )
 }
