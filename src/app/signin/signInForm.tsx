@@ -14,7 +14,7 @@ type SignInFormProps = {
 export default function SignInForm({ floating = false, hidden = true, onClose = undefined }: SignInFormProps) {
     return <form
             className={`transition-all ease-in-out md:w-[400px] md:h-fit duration-500 border shadow hover:shadow-2xl flex flex-col p-3 ${floating
-                ? `rounded-lg md:rounded-2xl fixed z-50 bg-white right-5 left-5 md:w-fit md:m-[unset] md:left-[unset] ${hidden
+                ? `rounded-lg md:rounded-2xl fixed z-50 bg-white right-5 left-5 w-fit md:m-[unset] md:left-[unset] ${hidden
                     ? "sm:-top-full -top-full"
                     : "md:top-10 top-1/4"}`
                 : "w-full h-full md:rounded-2xl"}`} >

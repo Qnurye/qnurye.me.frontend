@@ -1,27 +1,45 @@
 "use client";
 
-import {MouseEventHandler, useEffect, useState} from "react";
+import {MouseEventHandler, ReactNode, useEffect, useState} from "react";
 import Link from "next/link";
 import Head from "next/head";
 import AccountBoxOutlinedIcon from '@mui/icons-material/AccountBoxOutlined';
+import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
+import ScienceOutlinedIcon from '@mui/icons-material/ScienceOutlined';
+import SentimentSatisfiedAltOutlinedIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined';
 import SignInForm from "@/app/signin/signInForm";
 import Footer from "@/components/footer";
 
-function IndexPageNavigator({ className = '', title = "",url = "", seperated = false }) {
+function IndexPageNavigator({ className = '', title = "",url = "", seperated = false, children = null }: {
+    className?: string
+    title?: string
+    url?: string
+    seperated?: boolean
+    children?: ReactNode
+}) {
+    let [hovered, setHovered] = useState(false);
     return (
-        <div className={`${className} inline-flex text-deep-blue transition-all duration-400 ${seperated ? 'text-lg opacity-70' : 'text-5xl'}`}>
+        <div className={`${className} inline-flex text-deep-blue transition-all duration-400 ${seperated ? `${hovered? "text-xs": "text-3xl"} opacity-70` : 'text-5xl'}`}>
             <span className={`transition-all duration-700
             ${seperated ? '-translate-x-72' : ''}`}>/</span>
 
-            <Link href={url} className={`cursor-none text-center hover:outline-2
-            hover:outline-dashed hover:outline-deep-blue hover:opacity-100
-            hover:bg-lavender hover:rounded-lg hover:translate-x-2 hover:p-2
-            transition-all duration-500 hover:shadow-2xl
-            ${seperated
-                ? 'hover:text-deep-blue'
-                : 'hover:text-pastel-blue'}
-            `}
-            >{title}</Link>
+            <Link
+                href={url}
+                className={`cursor-none text-center transition-all duration-500 hover:outline-2 
+                hover:outline-dashed hover:outline-deep-blue 
+            ${seperated? 'hover:text-deep-blue': "hover:text-pastel-blue" +
+                    " hover:opacity-100 hover:bg-lavender hover:rounded-lg hover:translate-x-2 " +
+                    "hover:p-2 hover:shadow-2xl"}`}
+                onMouseEnter={()=>{setHovered(true)}}
+                onMouseLeave={()=>{setHovered(false)}}
+            >
+                <div className={`flex items-center justify-between ${seperated? '': ''}`}>
+                    {children}
+                    <span className={`${seperated ? `transition-all duration-500 ${hovered ? 'text-xl' : 'text-xs'}`: ''}`}>
+                        {title}
+                    </span>
+                </div>
+            </Link>
         </div>
     );
 }
@@ -100,11 +118,17 @@ function DockBar({ className = '', seperated = false, onClickProfileImage = unde
             : 'w-full p-10 h-screen top-0'}
         `}>
             <ProfileImage seperated={seperated} onClick={onClickProfileImage} />
-            <div className={`col-span-1 flex flex-col transition-all duration-700 text-center items-center justify-between
-            content-around h-max${seperated ? '-translate-y-20' :''}`}>
-                <IndexPageNavigator className="flex-1" title={"Archives"} seperated={seperated} />
-                <IndexPageNavigator className="flex-1 mt-5" title={"Labs"} seperated={seperated} />
-                <IndexPageNavigator className="flex-1 mt-5" title={"About"} seperated={seperated} />
+            <div className={`col-span-1 flex flex-col items-center transition-all duration-700 text-center justify-between
+            content-around h-max ${seperated ? '-translate-y-20' : ''}`}>
+                <IndexPageNavigator className="flex-1" title={"Archive"} seperated={seperated}>
+                    <Inventory2OutlinedIcon fontSize={`inherit`} />
+                </IndexPageNavigator>
+                <IndexPageNavigator className="flex-1 mt-5" title={"Labs"} seperated={seperated}>
+                    <ScienceOutlinedIcon fontSize={"inherit"} />
+                </IndexPageNavigator>
+                <IndexPageNavigator className="flex-1 mt-5" title={"About"} seperated={seperated}>
+                    <SentimentSatisfiedAltOutlinedIcon fontSize={"inherit"} />
+                </IndexPageNavigator>
             </div>
             <div className='row-span-2' />
         </div>
